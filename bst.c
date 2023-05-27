@@ -52,3 +52,45 @@ void pos_order(tree node){
   }
 }
 
+void reserve_bst(tree node){
+  if (node != NULL) {
+    reserve_bst(node->right);
+    printf("[%d]", node->val);
+    reserve_bst(node->left);
+  }
+}
+
+int ehPrimo(int num){
+  for (int i = 2; i < num; i++){
+    if(num % i == 0)
+      return 1; //nao e primo
+  }
+  return 0; //e primo
+}
+
+int qtd_primos_bst(tree no){
+  int aux, i;
+  if(no != NULL){
+    aux = qtd_primos_bst(no->left) + qtd_primos_bst(no->right);
+    if (ehPrimo(no->val) == 0){
+      return aux + 1;
+    } else {
+      return aux;
+    } 
+  }
+}
+
+int sucessor_bst(tree no, int val){
+  //implementar
+}
+
+void caminho_bst(tree node, int val){
+  printf("[%d]", node->val);
+  if (node != NULL && node->val != val) {
+    if(node->val < val){
+      caminho_bst(node->right, val);
+    } else {
+      caminho_bst(node->left, val);
+    }
+  }
+}
