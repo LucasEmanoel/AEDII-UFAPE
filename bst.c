@@ -80,8 +80,16 @@ int qtd_primos_bst(tree no){
   }
 }
 
-int sucessor_bst(tree no, int val){
-  //implementar
+int sucessor_bst(tree node, int val){
+  /*if (node != NULL) {
+    if (node->val < val){
+      sucessor_bst(node->left, val);
+    }
+    
+    sucessor_bst(node->right, val);
+  } else {
+    return -1;
+  }*/
 }
 
 void caminho_bst(tree node, int val){
@@ -92,5 +100,40 @@ void caminho_bst(tree node, int val){
     } else {
       caminho_bst(node->left, val);
     }
+  }
+}
+int somatorio(tree node){
+  int aux;
+  if(node != NULL){
+    aux = somatorio(node->left) + somatorio(node->right);
+    return aux + node->val;
+  }
+}
+
+int existe(tree node, int val){
+  if(node != NULL){
+    //caso base
+    if (node->val == val) {
+      return 1;
+    }
+    if (val > node->val) {
+      existe(node->right, val);
+    } else {
+      existe(node->left, val);
+    }
+  } else {
+    return 0;
+  }
+}
+
+int ajustar_porcentagem(int num, float porcentagem){
+  return num + ( num * (porcentagem / 100));
+}
+
+int reajuste(tree node, float porcentagem){
+  if (node != NULL) {
+    reajuste(node->left, porcentagem);
+    reajuste(node->right, porcentagem);
+    node->val = ajustar(node->val, porcentagem);
   }
 }

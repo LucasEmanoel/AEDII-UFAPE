@@ -37,10 +37,38 @@ int main(int argc, char *argv[])
       printf("Quantidade de Numeros Primos: %d", qtd_primos_bst(bst_tree));
       printf("\n");
       break;
+    case 7:
+      scanf("%d", &val);
+      sucessor_bst(bst_tree, val);
+      printf("\n");
     case 8:
       scanf("%d", &val);
       caminho_bst(bst_tree, val);
       printf("\n");
+      break;
+    case 9:
+      break;
+    case 10:
+      printf("Soma Total: %d", somatorio(bst_tree));
+      printf("\n");
+      break;
+    case 11:
+      break;
+    case 12:
+      scanf("%d", &val);
+      reajuste(bst_tree, val);
+      pre_order(bst_tree);
+      printf("\n");
+      break;
+    case 13:
+      scanf("%d", &val);
+      printf("%d Existe: %d", val, existe(bst_tree, val));
+      printf("\n");
+      break;
+    case 14:
+      break;
+    case 15:
+      break;
     case 0:
       exit(0);
     }
