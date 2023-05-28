@@ -15,54 +15,58 @@ int main(int argc, char *argv[])
     {
     case 1:
       scanf("%d", &aux);
-      bst_tree = add(bst_tree ,aux);
+      bst_tree = add_bst(bst_tree ,aux);
       break;
     case 2:
-      pre_order(bst_tree);
-      printf("\n");
+      pre_order_bst(bst_tree);
+      printf(" -> 2 \n");
       break;
     case 3:
-      in_order(bst_tree);
-      printf("\n");
+      in_order_bst(bst_tree);
+      printf(" -> 3 \n");
       break;
     case 4:
-      pos_order(bst_tree);
-      printf("\n");
+      pos_order_bst(bst_tree);
+      printf(" -> 4 \n");
       break;
     case 5:
       reserve_bst(bst_tree);
-      printf("\n");
+      printf("- > 5\n");
       break;
     case 6:
-      printf("Quantidade de Numeros Primos: %d", qtd_primos_bst(bst_tree));
+      printf("6 -> Quantidade de Numeros Primos: %d", qtd_primos_bst(bst_tree));printf("6 -> Quantidade de Numeros Primos: %d", qtd_primos_bst(bst_tree));
       printf("\n");
       break;
     case 7:
       scanf("%d", &val);
-      sucessor_bst(bst_tree, val);
+      printf("7 -> Sucessor: %d", sucessor_bst(bst_tree, val));
       printf("\n");
     case 8:
       scanf("%d", &val);
       caminho_bst(bst_tree, val);
-      printf("\n");
+      printf("---> 8 caminho \n");
       break;
     case 9:
+      scanf("%d", &val);
+      remover_bst(bst_tree, val);
+      pre_order_bst(bst_tree);
+      printf("---> remover 9 \n");
       break;
     case 10:
-      printf("Soma Total: %d", somatorio(bst_tree));
+      printf("Soma Total: %d", somatorio_bst(bst_tree));
       printf("\n");
       break;
     case 11:
       break;
     case 12:
       scanf("%d", &val);
-      reajuste(bst_tree, val);
-      pre_order(bst_tree);
-      printf("\n");
+      reajuste_bst(bst_tree, val);
+      pre_order_bst(bst_tree);
+      printf("---->30 porcento \n");
       break;
     case 13:
       scanf("%d", &val);
-      printf("%d Existe: %d", val, existe(bst_tree, val));
+      printf("%d Existe: %d", val, existe_bst(bst_tree, val));
       printf("\n");
       break;
     case 14:

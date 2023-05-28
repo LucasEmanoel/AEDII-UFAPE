@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-tree add(tree node, int val){
+tree add_bst(tree node, int val){
   //caso basico, ou seja. casa arvore vazia no primeiro elemento e caso preenchida no ultimo elemento
   if (node == NULL)
   {
@@ -18,9 +18,9 @@ tree add(tree node, int val){
     //sempre atualizamos os nodes que passamos recursivamente, por isso (node->right), caso o no ja tenha elemento esse valor simplesmennte nao muda.
     if (node->val < val)
     {
-      node->right = add(node->right, val);
+      node->right = add_bst(node->right, val);
     } else {
-      node->left = add(node->left, val);
+      node->left = add_bst(node->left, val);
     }
     //fiquei em duvida nesse bloco, (solicitar ajuda de alguem)
     return node;
@@ -28,26 +28,26 @@ tree add(tree node, int val){
   
 }
 
-void pre_order(tree node){
+void pre_order_bst(tree node){
   if (node != NULL) {
     printf("[%d]", node->val);
-    pre_order(node->left);
-    pre_order(node->right);
+    pre_order_bst(node->left);
+    pre_order_bst(node->right);
   }
 }
 
-void in_order(tree node){
+void in_order_bst(tree node){
   if (node != NULL) {
-    in_order(node->left);
+    in_order_bst(node->left);
     printf("[%d]", node->val);
-    in_order(node->right);
+    in_order_bst(node->right);
   }
 }
 
-void pos_order(tree node){
+void pos_order_bst(tree node){
   if (node != NULL) {
-    pos_order(node->left);
-    pos_order(node->right);
+    pos_order_bst(node->left);
+    pos_order_bst(node->right);
     printf("[%d]", node->val);
   }
 }
@@ -81,15 +81,17 @@ int qtd_primos_bst(tree no){
 }
 
 int sucessor_bst(tree node, int val){
-  /*if (node != NULL) {
-    if (node->val < val){
+  if (node != NULL) {
+    if (node->val <= val) {
+      sucessor_bst(node->right, val);
+    } else if(node->val > val && node->left == NULL){
+      return node->val;
+    } else {
       sucessor_bst(node->left, val);
     }
-    
-    sucessor_bst(node->right, val);
   } else {
     return -1;
-  }*/
+  }
 }
 
 void caminho_bst(tree node, int val){
@@ -102,24 +104,70 @@ void caminho_bst(tree node, int val){
     }
   }
 }
-int somatorio(tree node){
+void switch_nodes(tree node, int val){
+      tree aux = node->left;
+      while (aux->right != NULL) {
+        aux = aux->right;
+      }
+      node->val = aux->val;
+      aux->val = val;
+}
+tree remover_bst(tree node, int val){
+  if (node == NULL) {
+    return NULL;
+  }
+  
+  if(node->val == val){
+    if(node->left == NULL && node->right == NULL){
+      free(node);
+      return NULL;
+    }
+    if (node->left != NULL && node->right == NULL){
+      tree aux = node->left;
+      free(node);
+      return aux;
+    }
+    if (node->left == NULL && node->right != NULL){
+      tree aux = node->right;
+      free(node);
+      return aux;
+    }   
+    if (node->left != NULL && node->right != NULL){
+      switch_nodes(node, val);
+      node->left = remover_bst(node->left, val);
+      return node;  
+    }
+  } else
+  {
+    if (node->val <= val)
+    {
+      node->right = remover_bst(node->right, val);
+    } else {
+      node->left = remover_bst(node->left, val);
+    }
+    return node;
+  }
+  
+}
+
+int somatorio_bst(tree node){
   int aux;
   if(node != NULL){
-    aux = somatorio(node->left) + somatorio(node->right);
+    aux = somatorio_bst(node->left) + somatorio_bst(node->right);
     return aux + node->val;
   }
 }
 
-int existe(tree node, int val){
+int existe_bst(tree node, int val){
   if(node != NULL){
     //caso base
     if (node->val == val) {
       return 1;
     }
     if (val > node->val) {
-      existe(node->right, val);
+      existe_bst(node->right, val);
     } else {
-      existe(node->left, val);
+      existe_bst(node->left, val);
     }
   } else {
     return 0;
@@ -130,10 +178,10 @@ int ajustar_porcentagem(int num, float porcentagem){
   return num + ( num * (porcentagem / 100));
 }
 
-int reajuste(tree node, float porcentagem){
+int reajuste_bst(tree node, float porcentagem){
   if (node != NULL) {
-    reajuste(node->left, porcentagem);
-    reajuste(node->right, porcentagem);
-    node->val = ajustar(node->val, porcentagem);
+    reajuste_bst(node->left, porcentagem);
+    reajuste_bst(node->right, porcentagem);
+    node->val = ajustar_porcentagem(node->val, porcentagem);
   }
 }
