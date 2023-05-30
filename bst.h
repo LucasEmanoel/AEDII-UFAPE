@@ -21,5 +21,8 @@ int existe_bst(tree node, int val);
 int ajustar_porcentagem(int num, float porcentagem);
 int reajuste_bst(tree node, float porcentagem);
 tree remover_bst(tree node, int val);
+int altura_bst(tree node);
+void descendentes_bst(tree node, int n);
+tree podar_bst(tree node, int val);
 
 #endif

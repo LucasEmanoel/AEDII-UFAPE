@@ -57,6 +57,10 @@ int main(int argc, char *argv[])
       printf("\n");
       break;
     case 11:
+      scanf("%d", &val);
+      podar_bst(bst_tree, val);
+      pre_order_bst(bst_tree);
+      printf("---> podar \n");
       break;
     case 12:
       scanf("%d", &val);
@@ -70,10 +74,16 @@ int main(int argc, char *argv[])
       printf("\n");
       break;
     case 14:
+      scanf("%d", &val);
+      descendentes_bst(bst_tree, val);
+      printf("\n");
       break;
     case 15:
+      scanf("%d", &val);
+      int height = altura_bst(bst_tree);
+      printf("%d \n", height);
       break;
-    case 0:
+    case 99:
       exit(0);
     }
   }

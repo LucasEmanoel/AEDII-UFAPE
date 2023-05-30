@@ -16,7 +16,7 @@ tree add_bst(tree node, int val){
   else
   {
     //sempre atualizamos os nodes que passamos recursivamente, por isso (node->right), caso o no ja tenha elemento esse valor simplesmennte nao muda.
-    if (node->val < val)
+    if (node->val <= val)
     {
       node->right = add_bst(node->right, val);
     } else {
@@ -97,7 +97,7 @@ int sucessor_bst(tree node, int val){
 void caminho_bst(tree node, int val){
   printf("[%d]", node->val);
   if (node != NULL && node->val != val) {
-    if(node->val < val){
+    if(node->val <= val){
       caminho_bst(node->right, val);
     } else {
       caminho_bst(node->left, val);
@@ -134,13 +134,12 @@ tree remover_bst(tree node, int val){
     }   
     if (node->left != NULL && node->right != NULL){
       switch_nodes(node, val);
+      //reduziu a algum caso base
       node->left = remover_bst(node->left, val);
       return node;  
     }
-  } else
-  {
-    if (node->val <= val)
-    {
+  } else { 
+    if (node->val <= val) {
       node->right = remover_bst(node->right, val);
     } else {
       node->left = remover_bst(node->left, val);
@@ -164,7 +163,7 @@ int existe_bst(tree node, int val){
     if (node->val == val) {
       return 1;
     }
-    if (val > node->val) {
+    if (node->val <= val) {
       existe_bst(node->right, val);
     } else {
       existe_bst(node->left, val);
@@ -183,5 +182,56 @@ int reajuste_bst(tree node, float porcentagem){
     reajuste_bst(node->left, porcentagem);
     reajuste_bst(node->right, porcentagem);
     node->val = ajustar_porcentagem(node->val, porcentagem);
+  }
+}
+
+int altura_bst(tree node){
+  int left_height, right_height;
+  if(node != NULL){
+    left_height = altura_bst(node->left);
+    right_height = altura_bst(node->right);
+
+    if(right_height >= left_height){
+      return right_height + 1;
+    } else {
+      return left_height + 1;
+    }
+  } else {
+    return 0;
+  }
+
+}
+
+void descendentes_bst(tree node, int n){
+  if(node != NULL){
+    if (node->val == n) {
+      in_order_bst(node);
+    }
+    if (node->val <= n) {
+      descendentes_bst(node->right, n);
+    } else {
+      descendentes_bst(node->left, n);
+    }
+  }
+}
+
+tree podar_bst(tree node, int val){
+  if(node != NULL){
+    if (node->val == val) {
+      if (node->right != NULL) {
+        node->right = podar_bst(node->right, node->right->val);
+      }
+      if (node->left != NULL) {
+        node->left = podar_bst(node->left, node->left->val);
+      } 
+      free(node);
+      return NULL;
+    }
+    if (node->val <= val) {
+      node->right = podar_bst(node->right, val);
+    } else {
+      node->left = podar_bst(node->left, val);
+    }
+    return node;
   }
 }
