@@ -81,11 +81,13 @@ int qtd_primos_bst(tree no){
 }
 
 int sucessor_bst(tree node, int val){
+  int aux;
   if (node != NULL) {
+    if(node->val > val && node->left == NULL){
+      return node->val;
+    }
     if (node->val <= val) {
       sucessor_bst(node->right, val);
-    } else if(node->val > val && node->left == NULL){
-      return node->val;
     } else {
       sucessor_bst(node->left, val);
     }
@@ -95,13 +97,14 @@ int sucessor_bst(tree node, int val){
 }
 
 void caminho_bst(tree node, int val){
-  printf("[%d]", node->val);
   if (node != NULL && node->val != val) {
+    printf("[%d]", node->val);
     if(node->val <= val){
       caminho_bst(node->right, val);
     } else {
       caminho_bst(node->left, val);
     }
+    
   }
 }
 void switch_nodes(tree node, int val){
