@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     case 7:
       printf("7- ");
       scanf("%d", &val);
-      printf("%d \n", sucessor_bst(bst_tree, val));
+      printf("%d \n", sucessor_bst(bst_tree, -1, val));
       break;
     case 8:
       printf("8- ");
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     case 9:
       printf("9- ");
       scanf("%d", &val);
-      remover_bst(bst_tree, val);
+      remove_bst(bst_tree, val);
       printf("\n");
       break;
     case 10:

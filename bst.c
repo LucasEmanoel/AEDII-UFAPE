@@ -3,26 +3,18 @@
 #include <stdlib.h>
 
 tree add_bst(tree node, int val){
-  //caso basico, ou seja. casa arvore vazia no primeiro elemento e caso preenchida no ultimo elemento
-  if (node == NULL)
-  {
+  if (node == NULL) {
     tree new_node = (tree) malloc(sizeof(struct no));
     new_node->left = NULL;
     new_node->right = NULL;
     new_node->val = val;
     return new_node;
-  }
-  //casos onde tem elementos devemos percorrer recursivamente ate encontrar a posicao ideal.
-  else
-  {
-    //sempre atualizamos os nodes que passamos recursivamente, por isso (node->right), caso o no ja tenha elemento esse valor simplesmennte nao muda.
-    if (node->val <= val)
-    {
+  } else {
+    if (node->val <= val) {
       node->right = add_bst(node->right, val);
     } else {
       node->left = add_bst(node->left, val);
     }
-    //fiquei em duvida nesse bloco, (solicitar ajuda de alguem)
     return node;
   }
   
@@ -62,8 +54,7 @@ void reserve_bst(tree node){
 
 int ehPrimo(int num){
   for (int i = 2; i < num; i++){
-    if(num % i == 0)
-      return 1; //nao e primo
+    if(num % i == 0) return 1; //nao e primo
   }
   return 0; //e primo
 }
@@ -80,19 +71,19 @@ int qtd_primos_bst(tree no){
   }
 }
 
-int sucessor_bst(tree node, int val){
-  int aux;
+int sucessor_bst(tree node, int suc, int val){
   if (node != NULL) {
     if(node->val > val && node->left == NULL){
       return node->val;
     }
     if (node->val <= val) {
-      sucessor_bst(node->right, val);
+      sucessor_bst(node->right, suc, val);
     } else {
-      sucessor_bst(node->left, val);
+      suc = node->val;
+      sucessor_bst(node->left, suc, val);
     }
   } else {
-    return -1;
+    return suc;
   }
 }
 
@@ -115,7 +106,8 @@ void switch_nodes(tree node, int val){
       node->val = aux->val;
       aux->val = val;
 }
-tree remover_bst(tree node, int val){
+
+tree remove_bst(tree node, int val){
   if (node == NULL) {
     return NULL;
   }
@@ -137,15 +129,14 @@ tree remover_bst(tree node, int val){
     }   
     if (node->left != NULL && node->right != NULL){
       switch_nodes(node, val);
-      //reduziu a algum caso base
-      node->left = remover_bst(node->left, val);
+      node->left = remove_bst(node->left, val);
       return node;  
     }
   } else { 
     if (node->val <= val) {
-      node->right = remover_bst(node->right, val);
+      node->right = remove_bst(node->right, val);
     } else {
-      node->left = remover_bst(node->left, val);
+      node->left = remove_bst(node->left, val);
     }
     return node;
   }
@@ -162,7 +153,6 @@ int somatorio_bst(tree node){
 
 int existe_bst(tree node, int val){
   if(node != NULL){
-    //caso base
     if (node->val == val) {
       return 1;
     }
