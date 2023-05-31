@@ -7,23 +7,23 @@ typedef struct no{
 } no;
 typedef no *tree;
 
-tree add_bst(tree node, int val);
+tree insert_bst(tree node, int val);
 void pre_order_bst(tree node);
 void in_order_bst(tree node);
 void pos_order_bst(tree node);
 void reserve_bst(tree node);
-int ehPrimo(int num);
-int qtd_primos_bst(tree no);
-int sucessor_bst(tree node, int suc, int val);
-void caminho_bst(tree node, int val);
+int isPrime(int num);
+int sum_prime_numbers_bst(tree no);
+int successor_bst(tree node, int suc, int val);
+void path_bst(tree node, int val);
 void switch_nodes(tree node, int val);
 tree remove_bst(tree node, int val);
-int somatorio_bst(tree node);
-int existe_bst(tree node, int val);
-int ajustar_porcentagem(int num, float porcentagem);
-int reajuste_bst(tree node, float porcentagem);
-int altura_bst(tree node);
-void descendentes_bst(tree node, int n);
-tree podar_bst(tree node, int val);
+int sum_all_numbers_bst(tree node);
+int exist_bst(tree node, int val);
+int transform_percentage(int num, float porcentagem);
+int adjust_percentage_bst(tree node, float porcentagem);
+int height_bst(tree node);
+void succession_bst(tree node, int n);
+tree prune_bst(tree node, int val);
 
 #endif
