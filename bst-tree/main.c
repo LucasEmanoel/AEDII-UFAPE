@@ -17,75 +17,61 @@ int main(int argc, char *argv[])
       bst_tree = insert_bst(bst_tree ,val);
       break;
     case 2:
-      printf("2- ");
       pre_order_bst(bst_tree);
       printf("\n");
       break;
     case 3:
-      printf("3- ");
       in_order_bst(bst_tree);
       printf("\n");
       break;
     case 4:
-      printf("4- ");
       pos_order_bst(bst_tree);
       printf("\n");
       break;
     case 5:
-      printf("5- ");
       reserve_bst(bst_tree);
       printf("\n");
       break;
     case 6:
-      printf("6- ");
       printf("%d \n", sum_prime_numbers_bst(bst_tree));
       break;
     case 7:
-      printf("7- ");
       scanf("%d", &val);
       printf("%d \n", successor_bst(bst_tree, -1, val));
       break;
     case 8:
-      printf("8- ");
       scanf("%d", &val);
       path_bst(bst_tree, val);
       printf("\n");
       break;
     case 9:
-      printf("9- ");
       scanf("%d", &val);
       remove_bst(bst_tree, val);
       printf("\n");
       break;
     case 10:
-      printf("10- ");
       printf("%d \n", sum_all_numbers_bst(bst_tree));
       break;
     case 11:
-      printf("11- ");
       scanf("%d", &val);
       prune_bst(bst_tree, val);
       printf("\n");
       break;
     case 12:
-      printf("12- ");
       scanf("%d", &val);
       adjust_percentage_bst(bst_tree, val);
       printf("\n");
       break;
     case 13:
-      printf("13- ");
       scanf("%d", &val);
       printf("%d \n", exist_bst(bst_tree, val));
       break;
     case 14:
-      printf("14- ");
       scanf("%d", &val);
       succession_bst(bst_tree, val);
       printf("\n");
       break;
     case 15:
-      printf("15- ");
       scanf("%d", &val);
       printf("%d \n", height_bst(bst_tree));
       break;
