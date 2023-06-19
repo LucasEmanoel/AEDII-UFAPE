@@ -8,7 +8,7 @@ typedef struct no{
 } no;
 typedef no *tree;
 
-tree insert_avl(tree node, int val);
+tree insert_avl(tree node, int val, int *grown);
 tree remove_avl(tree node, int val);
 void pre_order_avl(tree node);
 void in_order_avl(tree node);

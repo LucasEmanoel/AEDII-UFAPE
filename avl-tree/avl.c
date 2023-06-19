@@ -2,6 +2,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+tree rsd(tree node){
+  tree u;
+  //atribuir o devido valor de u = p->left
+  u = node->left;
+
+  //atualizar o t2 para o node p->left | arvore que movimenta
+  node->left = u->right;
+  //atualizar o valor antigo de p para a nova posicao a direita
+  u->right = node;
+
+  node->fb = 0;
+  //atualizar por final o node
+  node = u;
+
+  return node;
+}
+
 tree insert_avl(tree node, int val, int *grown){
   if (node == NULL) {
     tree new_node = (tree) malloc(sizeof(struct no));
@@ -12,8 +29,8 @@ tree insert_avl(tree node, int val, int *grown){
     *grown = 1;
     return new_node;
   } else {
-    if (node->val <= val) {
-      node->right = insert_avl(node->right, val);
+    if (node->val <= val) { //right
+      node->right = insert_avl(node->right, val, grown);
       
 			if(*grown) {
       	switch(node->fb){
@@ -23,7 +40,7 @@ tree insert_avl(tree node, int val, int *grown){
 						break;
 					case 1:
 						*grown = 0;
-						#return rotate() -> implements this function.
+						//return rsd(node);
 						break;
 					case -1:
 						node->fb = 0;
@@ -31,8 +48,8 @@ tree insert_avl(tree node, int val, int *grown){
 						break;
 				}	
       }
-    } else {
-      node->left = insert_avl(node->left, val);\
+    } else { //left
+      node->left = insert_avl(node->left, val, grown);
 			
 			if(*grown){
 				switch(node->fb) {
@@ -46,7 +63,7 @@ tree insert_avl(tree node, int val, int *grown){
 						break;
 					case -1:
 						*grown = 0;
-						#return rotate() -> implements this function.
+						return rsd(node);
 						break;
 				}
 			}
