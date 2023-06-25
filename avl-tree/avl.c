@@ -18,7 +18,7 @@ tree rsd(tree node){
     p->fb = 0;
     u->fb = 0;
   } else {
-    //duvidas casos de remocao?
+    //duvidas casos de remoção?
     p->fb = -1;
     u->fb = 1;
   }
@@ -169,7 +169,7 @@ tree insert_avl(tree node, int val, int *grown){
 						break;
 				}	
       }
-      //simetrico
+      //simétrico
     } else {
       node->left = insert_avl(node->left, val, grown);
 			
@@ -197,11 +197,11 @@ tree insert_avl(tree node, int val, int *grown){
   
 }
 
-tree remove_avl(tree node, int val){
+tree remove_avl(tree node, int val, int *reduce){
   if (node == NULL) {
     return NULL;
   }
-  
+   
   if(node->val == val){
     if(node->left == NULL && node->right == NULL){
       free(node);
@@ -209,33 +209,76 @@ tree remove_avl(tree node, int val){
     }
     if (node->left != NULL && node->right == NULL){
       tree aux = node->left;
+      *reduce = 1;
       free(node);
       return aux;
     }
     if (node->left == NULL && node->right != NULL){
       tree aux = node->right;
+      *reduce = 1;
       free(node);
       return aux;
     }   
     if (node->left != NULL && node->right != NULL){
       switch_nodes(node, val);
-      node->left = remove_avl(node->left, val);
+      node->left = remove_avl(node->left, val, reduce);
       return node;  
     }
   } else { 
     if (node->val <= val) {
-      node->right = remove_avl(node->right, val);
+      node->right = remove_avl(node->right, val, reduce);
+      if(*reduce) {
+        switch (node->fb) {
+          case 1:
+            node->fb = 0;
+            *reduce = 1;
+            break;
+          case 0:
+            node->fb = -1;
+            *reduce = 0;
+            break;
+          case -1:
+            rotate(node);
+            break;
+        }
+      }
     } else {
-      node->left = remove_avl(node->left, val);
+      node->left = remove_avl(node->left, val, reduce);
+
+      if(*reduce) {
+        switch (node->fb) {
+          case 1:
+            rotate(node);
+            break;
+          case 0:
+            node->fb = -1;
+            *reduce = 0;
+            break;
+          case -1:
+            node->fb = 0;
+            *reduce = 1;
+            
+            break;
+        }
+      }
     }
     return node;
   }
   
 }
 
+void switch_nodes(tree node, int val){
+      tree aux = node->left;
+      while (aux->right != NULL) {
+        aux = aux->right;
+      }
+      node->val = aux->val;
+      aux->val = val;
+}
+
 void pre_order_avl(tree node){
   if (node != NULL) {
-    printf("[%d][%d] \n", node->val, node->fb);
+    printf("[%d,fb: %d]", node->val, node->fb);
     pre_order_avl(node->left);
     pre_order_avl(node->right);
   }
@@ -310,14 +353,6 @@ void path_avl(tree node, int val){
     }
     
   }
-}
-void switch_nodes(tree node, int val){
-      tree aux = node->left;
-      while (aux->right != NULL) {
-        aux = aux->right;
-      }
-      node->val = aux->val;
-      aux->val = val;
 }
 
 
