@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
       printf("\n");
       break;
     case 5:
-      reserve_bst(bst_tree);
+      reverse_bst(bst_tree);
       printf("\n");
       break;
     case 6:

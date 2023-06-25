@@ -44,11 +44,11 @@ void pos_order_bst(tree node){
   }
 }
 
-void reserve_bst(tree node){
+void reverse_bst(tree node){
   if (node != NULL) {
-    reserve_bst(node->right);
+    reverse_bst(node->right);
     printf("[%d]", node->val);
-    reserve_bst(node->left);
+    reverse_bst(node->left);
   }
 }
 

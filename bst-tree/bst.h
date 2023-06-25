@@ -11,7 +11,7 @@ tree insert_bst(tree node, int val);
 void pre_order_bst(tree node);
 void in_order_bst(tree node);
 void pos_order_bst(tree node);
-void reserve_bst(tree node);
+void reverse_bst(tree node);
 int isPrime(int num);
 int sum_prime_numbers_bst(tree no);
 int successor_bst(tree node, int suc, int val);

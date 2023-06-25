@@ -3,20 +3,141 @@
 #include <stdlib.h>
 
 tree rsd(tree node){
-  tree u;
-  //atribuir o devido valor de u = p->left
+  tree p, u, t1, t2, t3;
+  p = node;
   u = node->left;
 
-  //atualizar o t2 para o node p->left | arvore que movimenta
-  node->left = u->right;
-  //atualizar o valor antigo de p para a nova posicao a direita
-  u->right = node;
+  t1 = p->left;
+  t2 = u->right;
+  t3 = u->left;
 
-  node->fb = 0;
-  //atualizar por final o node
-  node = u;
+  p->left = t2;
+  u->right = p; 
 
-  return node;
+  if (u->fb == -1) {
+    p->fb = 0;
+    u->fb = 0;
+  } else {
+    //duvidas casos de remocao?
+    p->fb = -1;
+    u->fb = 1;
+  }
+  
+  return u;
+}
+
+tree rse(tree node){
+  tree p, u, t1, t2, t3;
+  p = node;
+  u = node->right;
+
+  t1 = p->left;
+  t2 = u->left;
+  t3 = u->right;
+
+  p->right = t2;
+  u->left = p;
+
+  if (u->fb == 1) {
+    p->fb = 0;
+    u->fb = 0;
+  } else {
+    //duvidas
+    //p->fb = 1;
+    //u->fb = -1;
+  }
+  
+  return u;
+}
+
+tree rdd(tree node){
+  tree p, u, v, t1, t2, t3, t4;
+  
+  p = node;
+  u = node->left;
+  v = u->right;
+
+  t1 = u->left; 
+  t2 = v->left;
+  t3 = v->right;
+  t4 = p->right;
+
+  u->right = t2;
+  p->left = t3;
+  v->left = u;
+  v->right = p;
+  
+  switch (v->fb) {
+    case -1:
+      break;
+    case 0:
+      p->fb = 0;
+      u->fb = 0;
+      break;
+    case 1:
+      break;
+  }
+
+  return v;
+}
+
+tree rde(tree node){
+  tree p, u, v, t1, t2, t3, t4;
+  
+  p = node;
+  u = node->right;
+  v = u->left;
+
+  t1 = p->left; 
+  t2 = v->left;
+  t3 = v->right;
+  t4 = u->right;
+
+  p->right = t2;
+  u->left = t3;
+  v->left = p;
+  v->right = u;
+  
+  switch (v->fb) {
+    case -1:
+      break;
+    case 0:
+      p->fb = 0;
+      u->fb = 0;
+      break;
+    case 1:
+      break;
+  }
+
+  return v;
+}
+
+tree rotate(tree node){
+  if (node->fb > 0){
+    switch (node->right->fb) {
+      case 0:
+        break;
+      case 1:
+        return rse(node);
+        break;
+      case -1:
+        //dupla
+        return rde(node);
+        break;
+    }
+  } else {
+    switch (node->left->fb) {
+      case 0:
+        break;
+      case 1:
+        //dupla
+        return rdd(node);
+        break; 
+      case -1:
+        return rsd(node);
+        break;
+    }
+  }
 }
 
 tree insert_avl(tree node, int val, int *grown){
@@ -29,7 +150,7 @@ tree insert_avl(tree node, int val, int *grown){
     *grown = 1;
     return new_node;
   } else {
-    if (node->val <= val) { //right
+    if (node->val <= val) {
       node->right = insert_avl(node->right, val, grown);
       
 			if(*grown) {
@@ -39,8 +160,8 @@ tree insert_avl(tree node, int val, int *grown){
 						*grown = 1;
 						break;
 					case 1:
-						*grown = 0;
-						//return rsd(node);
+						*grown = 0; 
+						return rotate(node);
 						break;
 					case -1:
 						node->fb = 0;
@@ -48,22 +169,24 @@ tree insert_avl(tree node, int val, int *grown){
 						break;
 				}	
       }
-    } else { //left
+      //simetrico
+    } else {
       node->left = insert_avl(node->left, val, grown);
 			
 			if(*grown){
 				switch(node->fb) {
-					case 0:
+					case 0: 
 						node->fb = -1;
 						*grown = -1;
 						break;
 					case 1:
-						node->fb = 0;
-						*grown = 0;
+            node->fb = 0;
+						*grown = 0; 
 						break;
 					case -1:
-						*grown = 0;
-						return rsd(node);
+						
+            *grown = 0;
+            return rotate(node);
 						break;
 				}
 			}
@@ -74,9 +197,45 @@ tree insert_avl(tree node, int val, int *grown){
   
 }
 
+tree remove_avl(tree node, int val){
+  if (node == NULL) {
+    return NULL;
+  }
+  
+  if(node->val == val){
+    if(node->left == NULL && node->right == NULL){
+      free(node);
+      return NULL;
+    }
+    if (node->left != NULL && node->right == NULL){
+      tree aux = node->left;
+      free(node);
+      return aux;
+    }
+    if (node->left == NULL && node->right != NULL){
+      tree aux = node->right;
+      free(node);
+      return aux;
+    }   
+    if (node->left != NULL && node->right != NULL){
+      switch_nodes(node, val);
+      node->left = remove_avl(node->left, val);
+      return node;  
+    }
+  } else { 
+    if (node->val <= val) {
+      node->right = remove_avl(node->right, val);
+    } else {
+      node->left = remove_avl(node->left, val);
+    }
+    return node;
+  }
+  
+}
+
 void pre_order_avl(tree node){
   if (node != NULL) {
-    printf("[%d]", node->val);
+    printf("[%d][%d] \n", node->val, node->fb);
     pre_order_avl(node->left);
     pre_order_avl(node->right);
   }
@@ -108,7 +267,7 @@ void reverse_avl(tree node){
 
 int isPrime(int num){
   for (int i = 2; i < num; i++){
-    if(num % i == 0) return 1; //nao e primo
+    if(num % i == 0) return 1; //nao e primo.
   }
   return 0; //e primo
 }
@@ -161,41 +320,6 @@ void switch_nodes(tree node, int val){
       aux->val = val;
 }
 
-tree remove_avl(tree node, int val){
-  if (node == NULL) {
-    return NULL;
-  }
-  
-  if(node->val == val){
-    if(node->left == NULL && node->right == NULL){
-      free(node);
-      return NULL;
-    }
-    if (node->left != NULL && node->right == NULL){
-      tree aux = node->left;
-      free(node);
-      return aux;
-    }
-    if (node->left == NULL && node->right != NULL){
-      tree aux = node->right;
-      free(node);
-      return aux;
-    }   
-    if (node->left != NULL && node->right != NULL){
-      switch_nodes(node, val);
-      node->left = remove_avl(node->left, val);
-      return node;  
-    }
-  } else { 
-    if (node->val <= val) {
-      node->right = remove_avl(node->right, val);
-    } else {
-      node->left = remove_avl(node->left, val);
-    }
-    return node;
-  }
-  
-}
 
 int sum_all_numbers_avl(tree node){
   int aux;

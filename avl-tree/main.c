@@ -5,8 +5,8 @@
 int main(int argc, char *argv[])
 {
   tree avl_tree;
-  int option, val;
-
+  int option, val, grown;
+  int * grown_aux = &grown;
   avl_tree = NULL;
 
   while (1) {
@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     switch (option) {
     case 1:
       scanf("%d", &val);
-      avl_tree = insert_avl(avl_tree ,val, 0);
+      avl_tree = insert_avl(avl_tree ,val, grown_aux);
       break;
     case 2:
       pre_order_avl(avl_tree);
