@@ -10,6 +10,7 @@ typedef no *tree;
 
 tree insert_avl(tree node, int val, int *grown);
 tree remove_avl(tree node, int val, int *reduce);
+tree rotatation(tree node);
 void pre_order_avl(tree node);
 void in_order_avl(tree node);
 void pos_order_avl(tree node);
@@ -26,5 +27,6 @@ int adjust_percentage_avl(tree node, float porcentagem);
 int height_avl(tree node);
 void succession_avl(tree node, int n);
 tree prune_avl(tree node, int val);
+int max_value(tree node);
 
 #endif

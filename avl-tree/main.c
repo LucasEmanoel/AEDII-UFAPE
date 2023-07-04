@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
   tree avl_tree;
-  int option, val, grown, reduce =1;
+  int option, val, grown, reduce =0;
   int * grown_aux = &grown;
   int * reduce_aux = &reduce;
   avl_tree = NULL;
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
       break;
     case 9:
       scanf("%d", &val);
-      remove_avl(avl_tree, val, reduce_aux);
+      avl_tree = remove_avl(avl_tree, val, reduce_aux);
       printf("\n");
       break;
     case 10:
