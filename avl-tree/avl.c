@@ -119,7 +119,7 @@ tree rde(tree node) {
 	}
 	return v;
 }
-tree rotatation(tree node) {
+tree rotation(tree node) {
 	if (node->fb > 0) {
 		switch (node->right->fb) {
       case 0: 
@@ -172,7 +172,7 @@ tree insert_avl(tree node, int val, int *grown) {
 					break;
 				case 1:
 					*grown = 0;
-					return rotatation(node);
+					return rotation(node);
 					break;
 				case -1:
 					node->fb = 0;
@@ -196,7 +196,7 @@ tree insert_avl(tree node, int val, int *grown) {
 					break;
 				case -1:
 					*grown = 0;
-					return rotatation(node);
+					return rotation(node);
 					break;
 				}
 			}
@@ -256,7 +256,7 @@ tree remove_avl(tree node, int val, int *reduce) {
 					*reduce = 0; //deu erros
 					break;
 				case -1: // 80 = -1
-					return rotatation(node);
+					return rotation(node);
 					break;
 				}
 		}
@@ -266,7 +266,7 @@ tree remove_avl(tree node, int val, int *reduce) {
 		if (*reduce) {
 			switch (node->fb) {
 				case 1:
-					return rotatation(node);
+					return rotation(node);
 					break;
 				case 0:
 					node->fb = 1;
