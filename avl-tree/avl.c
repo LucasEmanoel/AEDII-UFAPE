@@ -68,7 +68,7 @@ tree rdd(tree node) {
 	switch (v->fb) {
     case -1:
 			p->fb = 1;
-			u->fb = 1;
+			u->fb = 0;
 			v->fb = 0;
       break;
     case 0:
