@@ -17,3 +17,13 @@ void initialize(tree *no){
 
 void insert_rb(tree *node, int val);
 void remove_avl(tree *node, int val);
+
+enum cor cor(tree node){
+	enum cor c;
+	if(node == NULL)
+		return PRETO;
+	else
+		return node->cor;
+	return c;
+}
+
