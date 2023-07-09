@@ -27,3 +27,7 @@ enum cor cor(tree node){
 	return c;
 }
 
+int eh_raiz(tree node){
+	return (node->pai == NULL);
+}
+
