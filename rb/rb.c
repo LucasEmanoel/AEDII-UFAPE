@@ -4,9 +4,9 @@
 
 tree no_null;
 
-void inicializar(tree *raiz)
+void inicializar(tree *no)
 {
-	*raiz = NULL;
+	*no = NULL;
 	no_null = (tree)malloc(sizeof(struct no));
 	no_null->cor = DUPLO_PRETO;
 	no_null->val = 0;
@@ -14,10 +14,10 @@ void inicializar(tree *raiz)
 	no_null->right = NULL;
 }
 
-void adicionar(int valor, tree *raiz)
+void adicionar(int valor, tree *no)
 {
 	tree posicao, pai, novo;
-	posicao = *raiz;
+	posicao = *no;
 	pai = NULL;
 
 	while (posicao != NULL)
@@ -37,7 +37,7 @@ void adicionar(int valor, tree *raiz)
 	novo->cor = VERMELHO;
 
 	if (eh_raiz(novo))
-		*raiz = novo;
+		*no = novo;
 	else
 	{
 		if (valor > pai->val)
@@ -46,10 +46,10 @@ void adicionar(int valor, tree *raiz)
 			pai->left = novo;
 	}
 
-	ajustar(raiz, novo);
+	ajustar(no, novo);
 }
 
-void ajustar(tree *raiz, tree elemento)
+void ajustar(tree *no, tree elemento)
 {
 	while (cor(elemento->pai) == VERMELHO && cor(elemento) == VERMELHO)
 	{
@@ -63,7 +63,7 @@ void ajustar(tree *raiz, tree elemento)
 		}
 		if (eh_filho_esquerdo(elemento) && eh_filho_esquerdo(elemento->pai))
 		{
-			rotacao_simples_direita(raiz, elemento->pai->pai);
+			rotacao_simples_direita(no, elemento->pai->pai);
 			elemento->pai->cor = PRETO;
 			elemento->pai->right->cor = VERMELHO;
 			continue;
@@ -71,27 +71,36 @@ void ajustar(tree *raiz, tree elemento)
 		// caso 2b: rotação simples esquerda
 		if (eh_filho_direito(elemento) && eh_filho_direito(elemento->pai))
 		{
-			rotacao_simples_esquerda(raiz, elemento->pai->pai);
-			//atualizar cores
+			rotacao_simples_esquerda(no, elemento->pai->pai);
+			elemento->pai->cor = PRETO;
+			elemento->pai->left->cor = VERMELHO;
 			continue;
 		}
 		// caso 3a: rotação dupla direita
 		if (eh_filho_direito(elemento) && eh_filho_esquerdo(elemento->pai))
 		{
-			rotacao_dupla_direita(raiz, elemento->pai->pai);
+			rotacao_simples_esquerda(no, elemento->pai);
+			rotacao_simples_direita(no, elemento->pai);
+			//rotacao_dupla_direita(no, elemento->pai->pai);
+			elemento->cor = PRETO;
+			elemento->right->cor = VERMELHO;
 			continue;
 		}
 		// caso 3b: rotação dupla esquerda
 		if (eh_filho_esquerdo(elemento) && eh_filho_direito(elemento->pai))
 		{
-			rotacao_dupla_esquerda(raiz, elemento->pai->pai);
+			rotacao_simples_direita(no, elemento->pai);
+			rotacao_simples_esquerda(no, elemento->pai);
+			//rotacao_dupla_esquerda(no, elemento->pai->pai);
+			elemento->cor = PRETO;
+			elemento->left->cor = VERMELHO;
 			continue;
 		}
 	}
-	(*raiz)->cor = PRETO;
+	(*no)->cor = PRETO;
 }
 
-void rotacao_simples_direita(tree *raiz, tree pivo) {
+void rotacao_simples_direita(tree *no, tree pivo) {
 	tree u, t1;
 	u = pivo->left;
 	t1 = u->right;
@@ -108,7 +117,7 @@ void rotacao_simples_direita(tree *raiz, tree pivo) {
 	pivo->pai = u;
 
 	if (eh_raiz(u))
-		*raiz = u;
+		*no = u;
 	else
 	{
 		if (posicao_pivo_left)
@@ -118,7 +127,7 @@ void rotacao_simples_direita(tree *raiz, tree pivo) {
 	}
 }
 
-void rotacao_simples_esquerda(tree *raiz, tree pivo) {
+void rotacao_simples_esquerda(tree *no, tree pivo) {
 	tree u, t1;
 
 	u = pivo->right;
@@ -135,7 +144,7 @@ void rotacao_simples_esquerda(tree *raiz, tree pivo) {
 	pivo->pai = u;
 
 	if(eh_raiz(u)){
-		*raiz = u;
+		*no = u;
 	}	else {
 		if(posicao_pivo_right){
 			u->pai->right = u;
@@ -144,7 +153,7 @@ void rotacao_simples_esquerda(tree *raiz, tree pivo) {
 		}
 	}
 }
-void rotacao_dupla_direita(tree *raiz, tree pivo) {
+void rotacao_dupla_direita(tree *no, tree pivo) {
 	tree u, v, t2, t3;
 
 	u = pivo->left;
@@ -169,7 +178,7 @@ void rotacao_dupla_direita(tree *raiz, tree pivo) {
 	pivo->pai = v;
 
 	if(eh_raiz(v)){
-		*raiz = v;
+		*no = v;
 	}	else {
 		if(posicao_pivo_left){
 			v->pai->left = v;
@@ -178,7 +187,7 @@ void rotacao_dupla_direita(tree *raiz, tree pivo) {
 		}
 	}
 }
-void rotacao_dupla_esquerda(tree *raiz, tree pivo) {
+void rotacao_dupla_esquerda(tree *no, tree pivo) {
 	tree u, v, t2, t3;
 
 	u = pivo->right;
@@ -203,7 +212,7 @@ void rotacao_dupla_esquerda(tree *raiz, tree pivo) {
 	u->pai = v;
 
 	if(eh_raiz(v)){
-		*raiz = v;
+		*no = v;
 	}	else {
 		if(posicao_pivo_right){
 			v->pai->right = v;
@@ -236,33 +245,32 @@ tree tio(tree elemento)
 	return irmao(elemento->pai);
 }
 
-tree irmao(tree elemento)
-{
+tree irmao(tree elemento) {
 	if (eh_filho_esquerdo(elemento))
 		return elemento->pai->right;
 	else
 		return elemento->pai->left;
 }
 
-void imprimir(tree raiz)
+void imprimir(tree no)
 {
 	printf("(");
-	if (raiz != NULL)
+	if (no != NULL)
 	{
-		imprimir_elemento(raiz);
-		imprimir(raiz->left);
-		imprimir(raiz->right);
+		imprimir_elemento(no);
+		imprimir(no->left);
+		imprimir(no->right);
 	}
 	printf(")");
 }
 
-int altura(tree raiz)
+int altura(tree no)
 {
-	if (raiz == NULL)
+	if (no == NULL)
 	{
 		return 0;
 	}
-	return 1 + maior(altura(raiz->right), altura(raiz->left));
+	return 1 + maior(altura(no->right), altura(no->left));
 }
 
 int maior(int a, int b)
@@ -273,76 +281,76 @@ int maior(int a, int b)
 		return b;
 }
 
-int maior_elemento(tree raiz)
+int maior_elemento(tree no)
 {
-	if (raiz == NULL)
+	if (no == NULL)
 		return -1;
-	if (raiz->right == NULL)
-		return raiz->val;
+	if (no->right == NULL)
+		return no->val;
 	else
-		return maior_elemento(raiz->right);
+		return maior_elemento(no->right);
 }
 
-int menor_elemento(tree raiz)
+int menor_elemento(tree no)
 {
-	if (raiz == NULL)
+	if (no == NULL)
 		return -1;
-	if (raiz->left == NULL)
-		return raiz->val;
+	if (no->left == NULL)
+		return no->val;
 	else
-		return maior_elemento(raiz->left);
+		return maior_elemento(no->left);
 }
 
-void pre_order(tree raiz)
+void pre_order(tree no)
 {
-	if (raiz != NULL)
+	if (no != NULL)
 	{
-		imprimir_elemento(raiz);
-		pre_order(raiz->left);
-		pre_order(raiz->right);
+		imprimir_elemento(no);
+		pre_order(no->left);
+		pre_order(no->right);
 	}
 }
 
-void pos_order(tree raiz)
+void pos_order(tree no)
 {
-	if (raiz != NULL)
+	if (no != NULL)
 	{
-		pos_order(raiz->left);
-		pos_order(raiz->right);
-		imprimir_elemento(raiz);
+		pos_order(no->left);
+		pos_order(no->right);
+		imprimir_elemento(no);
 	}
 }
 
-void in_order(tree raiz)
+void in_order(tree no)
 {
-	if (raiz != NULL)
+	if (no != NULL)
 	{
-		in_order(raiz->left);
-		imprimir_elemento(raiz);
-		in_order(raiz->right);
+		in_order(no->left);
+		imprimir_elemento(no);
+		in_order(no->right);
 	}
 }
 
-void imprimir_elemento(tree raiz)
+void imprimir_elemento(tree no)
 {
-	switch (raiz->cor)
+	switch (no->cor)
 	{
 	case PRETO:
-		printf("\x1b[30m[%d]\x1b[0m", raiz->val);
+		printf("\x1b[30m[%d]\x1b[0m", no->val);
 		break;
 	case VERMELHO:
-		printf("\x1b[31m[%d]\x1b[0m", raiz->val);
+		printf("\x1b[31m[%d]\x1b[0m", no->val);
 		break;
 	case DUPLO_PRETO:
-		printf("\x1b[32m[%d]\x1b[0m", raiz->val);
+		printf("\x1b[32m[%d]\x1b[0m", no->val);
 		break;
 	}
 }
 
-void remover(int valor, tree *raiz)
+void remover(int valor, tree *no)
 {
 	tree posicao;
-	posicao = *raiz;
+	posicao = *no;
 
 	while (posicao != NULL)
 	{
@@ -362,7 +370,7 @@ void remover(int valor, tree *raiz)
 
 				if (eh_raiz(posicao))
 				{
-					*raiz = posicao->right;
+					*no = posicao->right;
 				}
 				else
 				{
@@ -380,7 +388,7 @@ void remover(int valor, tree *raiz)
 			}
 
 			// O elemento possui apenas um filho (esquerdo)
-			if ()
+			if (1)
 			{
 			}
 
@@ -389,12 +397,12 @@ void remover(int valor, tree *raiz)
 			{
 				if (eh_raiz(posicao))
 				{
-					*raiz = NULL;
+					*no = NULL;
 					free(posicao);
 					break;
 				}
 
-				// Remover elemento que não possui filhos e não é raiz
+				// Remover elemento que não possui filhos e não é no
 				// Se for vermelho, apenas remove atualizando o ponteiro
 				// correspondente do pai
 				if (posicao->cor == VERMELHO)
@@ -416,7 +424,7 @@ void remover(int valor, tree *raiz)
 					else
 						posicao->pai->right = no_null;
 					free(posicao);
-					reajustar(raiz, no_null);
+					reajustar(no, no_null);
 					break;
 				}
 			}
@@ -428,14 +436,14 @@ void remover(int valor, tree *raiz)
 	}
 }
 
-void reajustar(tree *raiz, tree elemento)
+void reajustar(tree *no, tree elemento)
 {
 	if (eh_raiz(elemento))
 	{
 		elemento->cor = PRETO;
 		if (elemento == no_null)
 		{
-			*raiz = NULL;
+			*no = NULL;
 		}
 		return;
 	}
@@ -446,30 +454,29 @@ void reajustar(tree *raiz, tree elemento)
 			cor(irmao(elemento)->left) == PRETO)
 	{
 		if (eh_filho_esquerdo(elemento))
-			rotacao_simples_esquerda(raiz, elemento->pai);
+			rotacao_simples_esquerda(no, elemento->pai);
 		else
-			rotacao_simples_direita(raiz, elemento->pai);
+			rotacao_simples_direita(no, elemento->pai);
 
 		elemento->pai->pai->cor = PRETO;
 		elemento->pai->cor = VERMELHO;
 
 		// Atenção à chamada recursiva do reajustar.
 		// O caso 2 não remove o duplo-preto
-		reajustar(raiz, elemento);
+		reajustar(no, elemento);
 		return;
 	}
 
 	// caso 3
-	if ()
-	{
+	if (1){
 		// Verificar e remover o no_null
 		// Chamada recursiva para eliminar o duplo preto do elemento P
-		//  reajustar(raiz, elemento->pai);
+		//  reajustar(no, elemento->pai);
 		return;
 	}
 
 	// caso 4
-	if ()
+	if (1)
 	{
 		// Verificar e remover o no_null
 		return;
@@ -477,31 +484,31 @@ void reajustar(tree *raiz, tree elemento)
 
 	// Casos 5 e 6 ficam mais fáceis separando o esquerdo do direito
 	// caso 5a
-	if ()
+	if (1)
 	{
 		return;
 	}
 
 	// caso 5b
-	if ()
+	if (1)
 	{
 		return;
 	}
 
 	// caso 6a
-	if ()
+	if (1)
 	{
 		return;
 	}
 
 	// caso 6b
-	if ()
+	if (1)
 	{
 		return;
 	}
 }
 
-void retira_duplo_preto(tree *raiz, tree elemento)
+void retira_duplo_preto(tree *no, tree elemento)
 {
 	if (elemento == no_null)
 		if (eh_filho_esquerdo(elemento))
