@@ -132,12 +132,17 @@ void rotacao_simples_esquerda(tree *no, tree pivo) {
 	pivo->pai = u;
 
 	if (eh_raiz(u)) {
+
 		*no = u;
 	} else {
 		if (posicao_pivo_right) {
+		
 			u->pai->right = u;
+			
 		} else {
+	
 			u->pai->left = u;
+			
 		}
 	}
 }
@@ -385,10 +390,13 @@ void remover(int valor, tree *no) {
 					// Se o elemento for preto, substitui pelo duplo preto e depois ajusta a árvore
 					no_null->cor = DUPLO_PRETO;
 					no_null->pai = posicao->pai;
-					if (eh_filho_esquerdo(posicao))
+					if (eh_filho_esquerdo(posicao)){
+		
 						posicao->pai->left = no_null;
-					else
+					}else{
+						
 						posicao->pai->right = no_null;
+					}
 					free(posicao);
 					reajustar(no, no_null);
 					break;
@@ -402,7 +410,20 @@ void remover(int valor, tree *no) {
 	}
 }
 
+void retira_duplo_preto(tree *no, tree elemento) {
+	if (elemento == no_null){
+		if (eh_filho_esquerdo(elemento)) {
+			elemento->pai->left = NULL;
+		}else {
+			elemento->pai->right = NULL;
+		}
+	}else{
+		elemento->cor = PRETO;
+	}
+}
+
 void reajustar(tree *no, tree elemento) {
+	//imprimir_elemento(elemento->pai);
 	if (eh_raiz(elemento)) {
 		elemento->cor = PRETO;
 		if (elemento == no_null) {
@@ -414,12 +435,12 @@ void reajustar(tree *no, tree elemento) {
 	if (cor(elemento->pai) == PRETO && cor(irmao(elemento)) == VERMELHO
 			&& cor(irmao(elemento)->right) == PRETO
 			&& cor(irmao(elemento)->left) == PRETO) {
-				printf("caso 2\n");
-		if (eh_filho_esquerdo(elemento))
+		//printf("caso 2\n");
+		if (eh_filho_esquerdo(elemento)){
 			rotacao_simples_esquerda(no, elemento->pai);
-		else
+		}else{
 			rotacao_simples_direita(no, elemento->pai);
-
+		}
 		elemento->pai->pai->cor = PRETO;
 		elemento->pai->cor = VERMELHO;
 
@@ -434,11 +455,12 @@ void reajustar(tree *no, tree elemento) {
 			&& cor(irmao(elemento)) == PRETO
 			&& cor(irmao(elemento)->right) == PRETO
 			&& cor(irmao(elemento)->left) == PRETO) {
-				printf("caso 3\n");
-		retira_duplo_preto(no, elemento);
+				//printf("caso 3\n");
+		
 		elemento->pai->cor = DUPLO_PRETO;
 		irmao(elemento)->cor = VERMELHO;
 		// Verificar e remover o no_null
+		retira_duplo_preto(no, elemento);
 		// Chamada recursiva para eliminar o duplo preto do elemento P
 		reajustar(no, elemento->pai);
 		return;
@@ -449,11 +471,12 @@ void reajustar(tree *no, tree elemento) {
 			&& cor(irmao(elemento)) == PRETO
 			&& cor(irmao(elemento)->right) == PRETO
 			&& cor(irmao(elemento)->left) == PRETO) {
-				printf("caso 4\n");
+				//printf("caso 4\n");
 		// Verificar e remover o no_null
-		retira_duplo_preto(no, elemento);
 		elemento->pai->cor = PRETO;
 		irmao(elemento)->cor = VERMELHO;
+
+		retira_duplo_preto(no, elemento);
 		return;
 	}
 
@@ -463,7 +486,7 @@ void reajustar(tree *no, tree elemento) {
 			&& cor(irmao(elemento)) == PRETO
 			&& cor(irmao(elemento)->right) == PRETO
 			&& cor(irmao(elemento)->left) == VERMELHO) {
-				printf("caso 5a\n");
+				//printf("caso 5a\n");
 		rotacao_simples_direita(no, irmao(elemento));
 		irmao(elemento)->cor = PRETO;
 		irmao(elemento)->right->cor = VERMELHO;
@@ -476,7 +499,7 @@ void reajustar(tree *no, tree elemento) {
 			&& cor(irmao(elemento)) == PRETO
 			&& cor(irmao(elemento)->left) == PRETO
 			&& cor(irmao(elemento)->right) == VERMELHO) {
-		printf("caso 5b\n");
+		//printf("caso 5b\n");
 		rotacao_simples_esquerda(no, irmao(elemento));
 		irmao(elemento)->cor = PRETO;
 		irmao(elemento)->left->cor = VERMELHO;
@@ -487,36 +510,30 @@ void reajustar(tree *no, tree elemento) {
 	// caso 6a
 	if (eh_filho_esquerdo(elemento) && cor(irmao(elemento)) == PRETO
 			&& cor(irmao(elemento)->right) == VERMELHO) {
-				printf("caso 6a\n");
+				//printf("caso 6a\n");
 		rotacao_simples_esquerda(no, elemento->pai);
-		retira_duplo_preto(no, elemento);
+		
 		elemento->pai->pai->cor = elemento->pai->cor;
 		elemento->pai->cor = PRETO;
 		tio(elemento)->cor = PRETO;
+		retira_duplo_preto(no, elemento);
 		return;
 	}
 
 	// caso 6b
 	if (eh_filho_direito(elemento) && cor(irmao(elemento)) == PRETO
 			&& cor(irmao(elemento)->left) == VERMELHO) {
-				printf("caso 6b\n");
+				//printf("caso 6b\n");
 		rotacao_simples_direita(no, elemento->pai);
 		
-		retira_duplo_preto(no, elemento);
+		
 
 		elemento->pai->pai->cor = elemento->pai->cor;
 		elemento->pai->cor = PRETO;
 		tio(elemento)->cor = PRETO;
+
+		retira_duplo_preto(no, elemento);
 		return;
 	}
 }
 
-void retira_duplo_preto(tree *no, tree elemento) {
-	if (elemento == no_null)
-		if (eh_filho_esquerdo(elemento))
-			elemento->pai->left = NULL;
-		else
-			elemento->pai->right = NULL;
-	else
-		elemento->cor = PRETO;
-}
