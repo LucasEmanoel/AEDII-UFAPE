@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 tree insert_bst(tree node, int val){
   if (node == NULL) {
     tree new_node = (tree) malloc(sizeof(struct no));
